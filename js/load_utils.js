@@ -42,6 +42,8 @@ const COLLECTION_LABELS = {
   "Coleção Brasiliana Itaú": "Brasiliana Itaú",
 };
 
+const NUM_CLUSTERS = 8;
+
 async function fetchData(mUrl) {
   const response = await fetch(mUrl);
   return await response.json();
@@ -94,10 +96,10 @@ function createMenuData(metaData, clusterData) {
   }
 
   const lang = window.location.href.includes("en") ? "en" : "pt";
-  menuData.clusters.labels = clusterData[8].clusters.descriptions.gemma3[lang].map(x => x.join(", "));
-  menuData.clusters.ids = new Array(8).fill(null).map(() => []);
+  menuData.clusters.labels = clusterData[NUM_CLUSTERS].clusters.descriptions.gemma3[lang].map(x => x.join(", "));
+  menuData.clusters.ids = new Array(NUM_CLUSTERS).fill(null).map(() => []);
 
-  for (const [id, { cluster, distances }] of Object.entries(clusterData[8].images)) {
+  for (const [id, { cluster, distances }] of Object.entries(clusterData[NUM_CLUSTERS].images)) {
     menuData.clusters.ids[cluster].push(id);
   }
 
@@ -129,8 +131,8 @@ function createMenuData(metaData, clusterData) {
 function combineClusterData(metaData, clusterData) {
   for (const id of Object.keys(metaData)) {
     metaData[id].cluster = {
-      idx: clusterData[8].images[id].cluster,
-      distances: clusterData[8].images[id].distances,
+      idx: clusterData[NUM_CLUSTERS].images[id].cluster,
+      distances: clusterData[NUM_CLUSTERS].images[id].distances,
     }
   }
   return metaData;
